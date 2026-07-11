@@ -11,7 +11,11 @@ import (
 	"github.com/yuin/goldmark/text"
 )
 
+const version = "1.0.0"
+
 func main() {
+	checkVersionFlag()
+
 	inputPath, outputPath := parseArgs()
 
 	mdContent, err := os.ReadFile(inputPath)
@@ -35,6 +39,18 @@ func main() {
 	}
 
 	fmt.Printf("Success! PDF generated at: %s\n", outputPath)
+}
+
+// checkVersionFlag checks for -v/--version before any other argument
+// validation, so it works regardless of how many other arguments are given.
+func checkVersionFlag() {
+	if len(os.Args) < 2 {
+		return
+	}
+	if os.Args[1] == "-v" || os.Args[1] == "--version" {
+		fmt.Printf("butterfly version %s\n", version)
+		os.Exit(0)
+	}
 }
 
 // parseArgs validates CLI arguments and formats the output filename
